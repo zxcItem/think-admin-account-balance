@@ -1,0 +1,44 @@
+{
+    "type": "think-admin-plugin",
+    "name": "xiaochao/think-plugs-account-fund",
+    "license": "MIT",
+    "description": "AccountFund Plugin for ThinkAdmin",
+    "authors": [
+        {
+            "name": "叶落无痕",
+            "email": "1262847141@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "ext-json": "*",
+        "zoujingli/ip2region": "^1.0|^2.0|@dev",
+        "zoujingli/think-install": "^1.0|@dev",
+        "zoujingli/think-library": "^6.1|@dev"
+    },
+    "extra": {
+        "config": {
+            "type": "module",
+            "name": "用户模块管理+积分余额"
+        },
+        "think": {
+            "services": [
+                "app\\account\\Service"
+            ]
+        },
+        "plugin": {
+            "copy": {
+                "account": "!app/account",
+                "stc/database": "database/migrations"
+            },
+            "clear": true
+        }
+    },
+    "minimum-stability": "dev",
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "zoujingli/think-install": true
+        }
+    }
+}
