@@ -1,5 +1,11 @@
 {extend name='table'}
 
+{block name="button"}
+<!--{if auth('config')}-->
+<a class="layui-btn layui-btn-sm layui-btn-primary" data-modal="{:url('config')}">{:lang('修改参数')}</a>
+<!--{/if}-->
+{/block}
+
 {block name="content"}
 <div class="layui-tab layui-tab-card">
     <ul class="layui-tab-title">
@@ -66,8 +72,17 @@
 </script>
 
 <script type="text/html" id="toolbar">
-    {if auth("remove")}
-    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要永久删除此账号吗？" data-action="{:url('remove')}" data-value="id#{{d.id}}">删 除</a>
+    {if isset($type) and $type eq 'index'}
+        <!--{if auth("balance/add")}-->
+        <a class="layui-btn layui-btn-sm layui-btn-primary" data-modal="{:url('balance/add')}?unid={{d.id}}" data-title="充值账户余额">余 额</a>
+        <!--{/if}-->
+        <!--{if auth("integral/add")}-->
+        <a class="layui-btn layui-btn-sm layui-btn-primary" data-modal="{:url('integral/add')}?unid={{d.id}}" data-title="充值账户积分">积 分</a>
+        <!--{/if}-->
+    {else}
+        <!--{if auth("remove")}-->
+        <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要永久删除此账号吗？" data-action="{:url('remove')}" data-value="id#{{d.id}}">删 除</a>
+        <!--{/if}-->
     {/if}
 </script>
 {/block}

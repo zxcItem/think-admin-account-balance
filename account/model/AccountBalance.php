@@ -6,7 +6,7 @@ namespace app\account\model;
 /**
  * 用户余额模型
  */
-class AccountBalance extends Abs
+class AccountBalance extends AccountIntegral
 {
 
 }

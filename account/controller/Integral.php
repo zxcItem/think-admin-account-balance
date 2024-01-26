@@ -8,6 +8,8 @@ use app\account\model\AccountUser;
 use app\account\model\AccountIntegral;
 use app\account\service\Integral as IntegralService;
 use think\admin\Controller;
+use think\admin\Exception;
+use think\admin\extend\CodeExtend;
 use think\admin\helper\QueryHelper;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
@@ -81,6 +83,32 @@ class Integral extends Controller
             throw $exception;
         } catch (\Exception $exception) {
             $this->error($exception->getMessage());
+        }
+    }
+
+    /**
+     * 积分充值
+     * @auth true
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException|Exception
+     */
+    public function add()
+    {
+        $data = $this->_vali([
+            'unid.require'   => '用户UID不能为空！',
+            'code.value'     => CodeExtend::uniqidDate(16, 'CZ'),
+            'name.default'   => '平台积分充值',
+            'amount.default' => 0,
+            'remark.default' => ''
+        ]);
+        if ($this->request->isGet()){
+            $this->user = AccountUser::mk()->where(['id' => $data['unid']])->find();
+            if (empty($this->user)) $this->error('待充值的用户不存在！');
+            AccountIntegral::mForm('form');
+        }else{
+            IntegralService::create(intval($data['unid']),$data['code'],$data['name'],floatval($data['amount']),$data['remark'],true);
+            $this->success('积分充值成功！');
         }
     }
 

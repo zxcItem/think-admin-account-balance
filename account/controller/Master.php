@@ -6,7 +6,9 @@ declare (strict_types=1);
 namespace app\account\controller;
 
 use app\account\model\AccountUser;
+use app\account\service\Config;
 use think\admin\Controller;
+use think\admin\Exception;
 use think\admin\helper\QueryHelper;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
@@ -57,5 +59,22 @@ class Master extends Controller
     public function remove()
     {
         AccountUser::mDelete();
+    }
+
+    /**
+     * 修改用户扩展配置
+     * @auth true
+     * @return void
+     * @throws Exception
+     */
+    public function config()
+    {
+        if ($this->request->isGet()) {
+            $this->vo = Config::get();
+            $this->fetch('config');
+        } else {
+            Config::set($this->request->post());
+            $this->success('配置更新成功！');
+        }
     }
 }

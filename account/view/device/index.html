@@ -76,8 +76,12 @@
 </script>
 
 <script type="text/html" id="toolbar">
-    {if auth("remove")}
-    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要永久删除此账号吗？" data-action="{:url('remove')}" data-value="id#{{d.id}}">删 除</a>
+    {if isset($type) and $type eq 'index'}
+
+    {else}
+        <!--{if auth("remove")}-->
+        <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要永久删除此账号吗？" data-action="{:url('remove')}" data-value="id#{{d.id}}">删 除</a>
+        <!--{/if}-->
     {/if}
 </script>
 {/block}

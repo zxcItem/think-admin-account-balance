@@ -1,0 +1,124 @@
+<form action="{:sysuri()}" class="layui-form-pane layui-form layui-card" data-auto="true" method="post">
+    <div class="layui-card-body padding-left-40" id="ConfigSpecs">
+        <fieldset class="layui-bg-gray"  data-rule-item>
+            <legend>
+                <div class="button-container">
+                    <a class="layui-icon layui-icon-add-circle-fine color-red" data-item>添加扩展数据</a>
+                </div>
+            </legend>
+
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th class="text-center nowrap"><b>键名</b></th>
+                            <th class="text-center nowrap"><b>键值</b></th>
+                            <th class="text-center nowrap pointer" width="15%"><b>操作</b></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="rows in items track by $index">
+                            <td class="padding-0">
+                                <label>
+                                    <input class="layui-input border-0 padding-left-0 text-center" ng-blur="rows.name=setValue($index,'name',$event.target.value)" ng-model="rows.name">
+                                </label>
+                            </td>
+
+                            <td class="padding-0">
+                                <label>
+                                    <input class="layui-input border-0 padding-left-0 text-center" ng-blur="rows.value=setValue($index,'value',$event.target.value)" ng-model="rows.value">
+                                </label>
+                            </td>
+                            <td class="text-center layui-bg-gray">
+                                <label class="think-checkbox margin-0 full-width full-height block">
+                                    <a class="layui-icon layui-icon-delete" ng-click="delSpecRow($index)" ng-if="!$vo.id"></a>
+                                </label>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <label class="layui-hide">
+                        <textarea class="layui-textarea" name="items">{{items}}</textarea>
+                    </label>
+
+        </fieldset>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" data-close type='button' data-confirm="确定要取消编辑吗？">取消编辑</button>
+    </div>
+    <label class="layui-hide">
+        <textarea id="DataItems">{$vo.items|raw|default=''}</textarea>
+    </label>
+</form>
+
+<script>
+
+    /*! 加载扩展插件 */
+    require(['angular'], function () {
+        var app = angular.module('ConfigSpecs', []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+
+
+            $rootScope.items = angular.fromJson(angular.element('#DataItems').val() || '[]') || {};
+            $rootScope.cache = angular.fromJson(angular.element('#DataItems').val() || '[]') || {};
+
+            $rootScope.setValue = function (key, name, value, callback) {
+                $rootScope.items[key] = $rootScope.items[key] || {};
+                $rootScope.cache[key] = $rootScope.cache[key] || {};
+                if (typeof callback === 'string' && callback.indexOf('_') > -1) {
+                    value = eval(callback.replace('_', "'" + value + "'"));
+                }
+                return $rootScope.cache[key][name] = $rootScope.items[key][name] = value;
+            };
+
+            $rootScope.getValue = function (key, name, value) {
+                var cache = $rootScope.cache[key] || {};
+                if (typeof cache[name] === 'undefined') {
+                    $rootScope.setValue(key, name, value, '_')
+                    cache = $rootScope.cache[key] || {};
+                }
+                return cache[name];
+            };
+
+            /*! 移除整行规格分组 */
+            $rootScope.delSpecRow = function (index) {
+                $rootScope.items.splice(index, 1)
+            };
+
+            /*! 当前商品规格发生变化时重新计算规格列表 */
+            $rootScope.$watch('items', function () {
+                var data = [];
+                $rootScope.items.forEach(function (spec) {
+                    data.push(spec)
+                });
+                data.forEach(function (rows, index) {
+                    var item = data[index];
+                    item.name = $rootScope.getValue(index, 'name', item.name ?? '');
+                    item.value = $rootScope.getValue(index, 'value', item.value ?? '');
+                });
+
+                $rootScope.items = data;
+                $rootScope.cache = data;
+            }, true);
+
+
+            /*! 增加分组的属性 */
+            $rootScope.addSpecVal = function (data) {
+                $rootScope.items.push(data);
+                $rootScope.$apply();
+            };
+
+            $('[data-item]').on('click', function () {
+                $rootScope.addSpecVal({'name':'','value':''});
+            });
+        }
+    });
+
+
+</script>
