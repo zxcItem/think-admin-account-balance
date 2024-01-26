@@ -103,7 +103,7 @@ class Integral extends Controller
             'remark.default' => ''
         ]);
         if ($this->request->isGet()){
-            $this->user = AccountUser::mk()->where(['id' => $data['unid']])->find();
+            $this->user = AccountUser::extraItem(intval($data['unid']),AccountIntegral::$Types);
             if (empty($this->user)) $this->error('待充值的用户不存在！');
             AccountIntegral::mForm('form');
         }else{

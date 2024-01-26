@@ -37,7 +37,7 @@
                         </tbody>
                     </table>
                     <label class="layui-hide">
-                        <textarea class="layui-textarea" name="items">{{items}}</textarea>
+                        <textarea class="layui-textarea" name="extra">{{items}}</textarea>
                     </label>
 
         </fieldset>
@@ -51,7 +51,7 @@
         <button class="layui-btn layui-btn-danger" data-close type='button' data-confirm="确定要取消编辑吗？">取消编辑</button>
     </div>
     <label class="layui-hide">
-        <textarea id="DataItems">{$vo.items|raw|default=''}</textarea>
+        <textarea id="DataItems">{$vo.extra|raw|default=''}</textarea>
     </label>
 </form>
 

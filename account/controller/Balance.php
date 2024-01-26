@@ -7,6 +7,7 @@ namespace app\account\controller;
 use app\account\model\AccountUser;
 use app\account\service\Balance as BalanceService;
 use app\account\model\AccountBalance;
+use app\account\service\Config;
 use think\admin\Controller;
 use think\admin\Exception;
 use think\admin\extend\CodeExtend;
@@ -103,7 +104,7 @@ class Balance extends Controller
             'remark.default' => ''
         ]);
         if ($this->request->isGet()){
-            $this->user = AccountUser::mk()->where(['id' => $data['unid']])->find()->toArray();
+            $this->user = AccountUser::extraItem(intval($data['unid']),AccountBalance::$Types);
             if (empty($this->user)) $this->error('待充值的用户不存在！');
             AccountBalance::mForm('form');
         }else{

@@ -11,6 +11,16 @@ use think\model\relation\HasOne;
  */
 class AccountIntegral extends Abs
 {
+    /**
+     * 余额扩展数据
+     * @var array[]
+     */
+    public static $Types = [
+        ['value' => '充值积分', 'amount' => 0, 'name' => 'integral_total'],
+        ['value' => '剩余积分', 'amount' => 0, 'name' => 'integral_usable'],
+        ['value' => '锁定积分', 'amount' => 0, 'name' => 'integral_lock'],
+        ['value' => '支出积分', 'amount' => 0, 'name' => 'integral_used'],
+    ];
 
     /**
      * 关联用户数据

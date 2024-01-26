@@ -25,16 +25,7 @@ class Config
      * @var string[]
      */
     public static $pageTypes = [
-        [
-            'name' => 'user_agreement',
-            'title' => '用户使用协议',
-            'temp'  => 'content'
-        ],
-        [
-            'name' => 'slider_page',
-            'title' => '首页轮播',
-            'temp'  => 'slider'
-        ]
+
     ];
 
     /**

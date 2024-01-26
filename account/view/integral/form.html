@@ -21,7 +21,25 @@
                 </div>
             </div>
         </fieldset>
-
+        <fieldset class="layui-form-item">
+            <legend>积分详情</legend>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    {foreach $user.extra_arry as $v}
+                    <th class="text-center layui-bg-gray">{$v.value}</th>
+                    {/foreach}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {foreach $user.extra_arry as $v}
+                    <td class="text-center">{$v.amount} $</td>
+                    {/foreach}
+                </tr>
+                </tbody>
+            </table>
+        </fieldset>
         <label class="layui-form-item relative block">
             <span class="help-label"><b>充值账户积分</b>Amount</span>
             <input class="layui-input" type="number" data-blur-number="2" data-value-max="999999999.99" maxlength="12" name="amount" placeholder="请输入充值账户积分" required value="{$vo.amount|default='0.00'}">
