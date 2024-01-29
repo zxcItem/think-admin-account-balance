@@ -51,11 +51,14 @@ class Portal extends Controller
 
         $this->userMonth = $this->app->cache->get('userMonth', []);
         if (empty($this->userMonth)) {
+            $field = ['count(1)' => 'count', 'left(create_time,10)' => 'mday'];
+            $model = AccountUser::mk()->field($field);
+            $users = $model->whereTime('create_time', '-30 days')->where(['deleted' => 0])->group('mday')->select()->column(null, 'mday');
             for ($i = 30; $i >= 0; $i--) {
                 $date = date('Y-m-d', strtotime("-{$i}days"));
                 $this->userMonth[] = [
                     '当天日期' => date('m-d', strtotime("-{$i}days")),
-                    '本月统计' => AccountUser::mk()->where(['deleted'=>0])->whereLike('create_time', "{$date}%")->count(),
+                    '本月统计' => ($users[$date] ?? [])['count'] ?? 0
                 ];
             }
             $this->app->cache->set('userMonth', $this->userMonth, 60);
