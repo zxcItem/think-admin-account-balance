@@ -54,6 +54,12 @@ class Service extends Plugin
                             ['name' => '用户余额管理', 'icon' => 'layui-icon layui-icon-rmb', 'node' => "account/balance/index"],
                             ['name' => '用户积分管理', 'icon' => 'layui-icon layui-icon-rmb', 'node' => "account/integral/index"],
                         ],
+                    ],
+                    [
+                        'name' => '签到管理',
+                        'subs' => [
+                            ['name' => '用户签到管理', 'icon' => 'layui-icon layui-icon-table', 'node' => "account/sign/index"],
+                        ],
                     ]
                 ],
             ]

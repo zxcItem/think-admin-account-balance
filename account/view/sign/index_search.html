@@ -1,0 +1,22 @@
+<fieldset>
+    <legend>条件搜索</legend>
+    <form action="{:request()->url()}" autocomplete="off" class="layui-form layui-form-pane form-search" method="get" onsubmit="return false">
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">IP地址</label>
+            <label class="layui-input-inline">
+                <input class="layui-input" name="login_ip" placeholder="请输入IP地址" value="{$get.login_ip|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">创建时间</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" data-date-range name="create_time" placeholder="请选择创建时间" value="{$get.create_time|default=''}">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+    </form>
+
+</fieldset>

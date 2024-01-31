@@ -58,7 +58,7 @@ class Portal extends Controller
                 $date = date('Y-m-d', strtotime("-{$i}days"));
                 $this->userMonth[] = [
                     '当天日期' => date('m-d', strtotime("-{$i}days")),
-                    '本月统计' => ($users[$date] ?? [])['count'] ?? 0
+                    '本月统计' => ($users[$date] ?? [])['count'] ?? 0,
                 ];
             }
             $this->app->cache->set('userMonth', $this->userMonth, 60);

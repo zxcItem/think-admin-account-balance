@@ -1,0 +1,200 @@
+<form action="{:sysuri()}" class="layui-form-pane layui-tab layui-form layui-card" data-auto="true" method="post">
+    <ul class="layui-tab-title">
+        <li class="layui-this">基本配置</li>
+        <li>连续签到</li>
+        <li>签到规则</li>
+    </ul>
+    <div class="layui-card-body padding-left-40 layui-tab-content">
+        <!--基本配置-->
+        <div class="layui-tab-item layui-show">
+                <fieldset class="block">
+                    <legend>
+                        <input name="is_sign" type="hidden" value="0">
+                        {if isset($vo.is_sign) and $vo.is_sign eq 1}
+                        <input lay-skin="switch" lay-text="已启用签到功能|已停用签到功能" name="is_sign" type="checkbox" value="1" checked>
+                        {else}
+                        <input lay-skin="switch" lay-text="已启用签到功能|已停用签到功能" name="is_sign" type="checkbox" value="1">
+                        {/if}
+                    </legend>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label color-green">签到奖励</label>
+                        <div class="layui-input-block">
+                            <input type="number" name="reward" value="{$vo.reward|default=''}" placeholder="请输入普通签到" class="layui-input">
+                            <span class="color-desc">* 每日签到赠送积分/余额</span>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" pane>
+                        <label class="layui-form-label color-green">签到周期</label>
+                        <div class="layui-input-block">
+                            {empty name='vo.type'}{assign name='vo.type' value='no'}{/empty}
+                            {foreach ['no'=>'永不限制','week'=>'每个周末','month'=>'每个月末'] as $key => $value}
+                            {if isset($vo.type) && $vo.type eq $key}
+                            <input type="radio" name="type" value="{$key}" title="{$value}" checked>
+                            {else}
+                            <input type="radio" name="type" value="{$key}" title="{$value}">
+                            {/if}
+                            {/foreach}
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="block">
+                    <legend>
+                        <input name="is_rep_sign" type="hidden" value="0">
+                        {if isset($vo.is_rep_sign) and $vo.is_rep_sign eq 1}
+                        <input lay-skin="switch" lay-text="已启用补签功能|已停用补签功能" name="is_rep_sign" type="checkbox" value="1" checked>
+                        {else}
+                        <input lay-skin="switch" lay-text="已启用补签功能|已停用补签功能" name="is_rep_sign" type="checkbox" value="1">
+                        {/if}
+                    </legend>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label color-green">补签消耗</label>
+                        <div class="layui-input-block">
+                            <input type="number" name="rep_consume" value="{$vo.rep_consume|default=''}" class="layui-input">
+                            <span class="color-desc">* 断签后，补签需要消耗部分积分</span>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label color-green">补签期限</label>
+                        <div class="layui-input-block">
+                            <label>
+                                <input type="number" name="rep_day" value="{$vo.rep_day|default=''}" class="layui-input">
+                            </label>
+                            <span class="color-desc">* 断签后，补签只有在有效期内才可以使用</span>
+                        </div>
+                    </div>
+                </fieldset>
+
+        </div>
+        <!--基本配置-->
+
+        <!--连续签到-->
+        <div class="layui-tab-item">
+            <div class="layui-form-item" id="ConfigSpecs">
+                <fieldset class="layui-bg-gray"  data-rule-item>
+                    <legend>
+                        <div class="button-container">
+                            <a class="layui-icon layui-icon-add-circle-fine color-green" data-item>添加签到规则</a>
+                        </div>
+                    </legend>
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th class="text-center nowrap"><b>连续签到天数</b></th>
+                            <th class="text-center nowrap"><b>奖励积分</b></th>
+                            <th class="text-center nowrap pointer" width="15%"><b>操作</b></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="rows in items track by $index">
+                            <td class="padding-0">
+                                <label>
+                                    <input class="layui-input border-0 padding-left-0 text-center" ng-blur="rows.max_sign=setValue($index,'max_sign',$event.target.value)" ng-model="rows.max_sign">
+                                </label>
+                            </td>
+                            <td class="padding-0">
+                                <label>
+                                    <input class="layui-input border-0 padding-left-0 text-center" ng-blur="rows.integral=setValue($index,'integral',$event.target.value)" ng-model="rows.integral">
+                                </label>
+                            </td>
+                            <td class="text-center layui-bg-gray">
+                                <label class="think-checkbox margin-0 full-width full-height block">
+                                    <a class="layui-icon layui-icon-delete" ng-click="delSpecRow($index)" ng-if="!$vo.id"></a>
+                                </label>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p class="color-desc">请注意使用连签规则需要天数累加的话使用 “n" ！代替天数累加</p>
+                    <label class="layui-hide">
+                        <textarea class="layui-textarea" name="extra">{{items}}</textarea>
+                    </label>
+                </fieldset>
+            </div>
+        </div>
+        <!--连续签到-->
+
+        <!--签到规则-->
+        <div class="layui-tab-item">
+            <label class="layui-form-item block relative margin-top-10">
+                <textarea placeholder="请输入签到规则" class="layui-textarea" name="content">{$vo.content|default=""}</textarea>
+            </label>
+        </div>
+        <!--签到规则-->
+
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" data-close type='button' data-confirm="确定要取消编辑吗？">取消编辑</button>
+    </div>
+    <label class="layui-hide">
+        <textarea id="DataItems">{$vo.extra|raw|default=''}</textarea>
+    </label>
+</form>
+
+<script>
+
+    /*! 加载扩展插件 */
+    require(['angular','ckeditor'], function () {
+        window.createEditor('[name=content]', {height: 350});
+        var app = angular.module('ConfigSpecs', []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+            $rootScope.items = angular.fromJson(angular.element('#DataItems').val() || '[]') || {};
+            $rootScope.setValue = function (key, name, value, callback) {
+                $rootScope.items[key] = $rootScope.items[key] || {};
+                if (typeof callback === 'string' && callback.indexOf('_') > -1) {
+                    value = eval(callback.replace('_', "'" + value + "'"));
+                }
+                return $rootScope.items[key][name] = value;
+            };
+
+            $rootScope.getValue = function (key, name, value) {
+                var cache = $rootScope.items[key] || {};
+                if (typeof cache[name] === 'undefined') {
+                    $rootScope.setValue(key, name, value, '_')
+                    cache = $rootScope.items[key] || {};
+                }
+                return cache[name];
+            };
+
+            /*! 移除整行规格分组 */
+            $rootScope.delSpecRow = function (index) {
+                $rootScope.items.splice(index, 1)
+            };
+
+            /*! 当前商品规格发生变化时重新计算规格列表 */
+            $rootScope.$watch('items', function () {
+                var data = [];
+                $rootScope.items.forEach(function (spec) {
+                    data.push(spec)
+                });
+                data.forEach(function (rows, index) {
+                    var item = data[index];
+                    item.max_sign = $rootScope.getValue(index, 'max_sign', item.max_sign ?? '');
+                    item.integral = $rootScope.getValue(index, 'integral', item.integral ?? '');
+                });
+
+                $rootScope.items = data;
+            }, true);
+
+            /*! 增加分组的属性 */
+            $rootScope.addSpecVal = function (data) {
+                $rootScope.items.push(data);
+                $rootScope.$apply();
+            };
+
+            $('[data-item]').on('click', function () {
+                $rootScope.addSpecVal({'max_sign':'','integral':''});
+            });
+        }
+    });
+
+
+</script>

@@ -33,6 +33,7 @@ class InstallAccount extends Migrator
         $this->_create_account_bind();
         $this->_create_account_msms();
         $this->_create_account_user();
+        $this->_create_account_sign();
         $this->_create_account_balance();
         $this->_create_account_integral();
     }
@@ -63,6 +64,12 @@ class InstallAccount extends Migrator
                             ['name' => '数据统计报表', 'icon' => 'layui-icon layui-icon-chart', 'node' => "account/portal/fund"],
                             ['name' => '用户余额管理', 'icon' => 'layui-icon layui-icon-rmb', 'node' => "account/balance/index"],
                             ['name' => '用户积分管理', 'icon' => 'layui-icon layui-icon-rmb', 'node' => "account/integral/index"],
+                        ],
+                    ],
+                    [
+                        'name' => '签到管理',
+                        'subs' => [
+                            ['name' => '用户签到管理', 'icon' => 'layui-icon layui-icon-table', 'node' => "account/sign/index"],
                         ],
                     ]
                 ],
@@ -250,6 +257,40 @@ class InstallAccount extends Migrator
             ->addIndex('status', ['name' => 'idx_account_user_status'])
             ->addIndex('deleted', ['name' => 'idx_account_user_deleted'])
             ->addIndex('create_time', ['name' => 'idx_account_user_create_time'])
+            ->create();
+
+        // 修改主键长度
+        $this->table($table)->changeColumn('id', 'integer', ['limit' => 11, 'identity' => true]);
+    }
+
+    /**
+     * 插件-账号-签到
+     * @class AccountSign
+     * @table account_sign
+     * @return void
+     */
+    private function _create_account_sign()
+    {
+
+        // 当前数据表
+        $table = 'account_sign';
+
+        // 存在则跳过
+        if ($this->hasTable($table)) return;
+
+        // 数据表
+        $this->table($table, [
+            'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => '插件-账号-签到',
+        ])
+            ->addColumn('unid', 'biginteger', ['limit' => 20, 'default' => 0, 'null' => true, 'comment' => '账号编号'])
+            ->addColumn('login_ip', 'string', ['limit' => 32, 'default' => '', 'null' => true, 'comment' => 'IP地址'])
+            ->addColumn('reward', 'integer', ['limit' => 11, 'default' => 0, 'null' => true, 'comment' => '签到奖励'])
+            ->addColumn('type', 'integer', ['limit' => 1, 'default' => 0, 'null' => true, 'comment' => '类型(0积分)'])
+            ->addColumn('desc', 'string', ['limit' => 100, 'default' => '', 'null' => true, 'comment' => '备注说明'])
+            ->addColumn('days', 'integer', ['limit' => 11, 'default' => 0, 'null' => true, 'comment' => '连签天数'])
+            ->addColumn('create_time', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间'])
+            ->addIndex('unid', ['name' => 'idx_account_sign_unid'])
+            ->addIndex('create_time', ['name' => 'idx_account_sign_create_time'])
             ->create();
 
         // 修改主键长度

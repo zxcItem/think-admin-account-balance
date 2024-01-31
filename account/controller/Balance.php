@@ -99,7 +99,7 @@ class Balance extends Controller
         $data = $this->_vali([
             'unid.require'   => '用户UID不能为空！',
             'code.value'     => CodeExtend::uniqidDate(16, 'CZ'),
-            'name.default'   => '平台余额充值',
+            'name.default'   => '平台充值',
             'amount.default' => 0,
             'remark.default' => ''
         ]);
