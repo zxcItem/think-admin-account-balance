@@ -77,4 +77,13 @@ class Master extends Controller
             $this->success('配置更新成功！');
         }
     }
+
+    /**
+     * 刷新积分余额
+     * @auth true
+     */
+    public function sync()
+    {
+        $this->_queue('刷新用户积分余额', 'account:recount', 0, []);
+    }
 }

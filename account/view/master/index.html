@@ -1,6 +1,9 @@
 {extend name='table'}
 
 {block name="button"}
+<!--{if auth('sync')}-->
+<a data-table-id="UserTable" class="layui-btn layui-btn-sm layui-btn-primary" data-queue="{:url('sync')}">刷新积分余额</a>
+<!--{/if}-->
 <!--{if auth('config')}-->
 <a class="layui-btn layui-btn-sm layui-btn-primary" data-modal="{:url('config')}">{:lang('修改参数')}</a>
 <!--{/if}-->

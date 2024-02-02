@@ -4,6 +4,7 @@ declare (strict_types=1);
 
 namespace app\account;
 
+use app\account\command\Recount;
 use think\admin\Plugin;
 
 /**
@@ -25,6 +26,14 @@ class Service extends Plugin
      */
     protected $package = 'xiaochao/think-plugs-account-fund';
 
+    /**
+     * 插件服务注册
+     * @return void
+     */
+    public function register(): void
+    {
+        $this->commands([Recount::class]);
+    }
 
     /**
      * 用户模块菜单配置

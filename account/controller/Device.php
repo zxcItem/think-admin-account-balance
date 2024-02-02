@@ -35,8 +35,8 @@ class Device extends Controller
             $this->title = '终端账号管理';
             $this->types = Account::types(1);
         }, function (QueryHelper $query) {
-            $query->where(['deleted' => 0, 'status' => intval($this->type === 'index')]);
             $query->with('user')->equal('type#utype')->like('phone,nickname,username,create_time');
+            $query->where(['deleted' => 0, 'status' => intval($this->type === 'index')]);
         });
     }
 
