@@ -36,8 +36,8 @@ class Integral extends Controller
         $this->type = $this->get['type'] ?? 'index';
         AccountIntegral::mQuery()->layTable(function () {
             $this->title = '用户余额管理';
-            $this->integralTotal = AccountIntegral::mk()->whereRaw("amount>0")->sum('amount');
-            $this->integralCount = AccountIntegral::mk()->whereRaw("amount<0")->sum('amount');
+            $this->integralTotal = AccountIntegral::mk()->where(['cancel' => 0, 'deleted' => 0])->whereRaw("amount>0")->sum('amount');
+            $this->integralCount = AccountIntegral::mk()->where(['cancel' => 0, 'deleted' => 0])->whereRaw("amount<0")->sum('amount');
         }, function (QueryHelper $query) {
             $db = AccountUser::mQuery()->like('email|nickname|username|phone#user')->db();
             if ($db->getOptions('where')) $query->whereRaw("unid in {$db->field('id')->buildSql()}");
