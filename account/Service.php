@@ -24,7 +24,7 @@ class Service extends Plugin
      * 定义安装包名
      * @var string
      */
-    protected $package = 'xiaochao/think-plugs-account-fund';
+    protected $package = 'xiaochao/think-admin-account-balance';
 
     /**
      * 插件服务注册
@@ -36,7 +36,7 @@ class Service extends Plugin
     }
 
     /**
-     * 用户模块菜单配置
+     * 菜单配置
      * @return array[]
      */
     public static function menu(): array
@@ -45,7 +45,6 @@ class Service extends Plugin
         return [
             [
                 'name' => '用户管理',
-                'sort' => '0',
                 'subs' => [
                     [
                         'name' => '账户管理',

@@ -1,8 +1,8 @@
 {
     "type": "think-admin-plugin",
-    "name": "xiaochao/think-plugs-account-fund",
+    "name": "xiaochao/think-admin-account-balance",
     "license": "MIT",
-    "description": "AccountFund Plugin for ThinkAdmin",
+    "description": "ThinkAdminAccountBalance for ThinkAdmin",
     "authors": [
         {
             "name": "叶落无痕",
