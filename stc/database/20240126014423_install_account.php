@@ -33,6 +33,7 @@ class InstallAccount extends Migrator
         $this->_create_account_bind();
         $this->_create_account_msms();
         $this->_create_account_user();
+        $this->_create_account_file();
         $this->_create_account_sign();
         $this->_create_account_balance();
         $this->_create_account_integral();
@@ -55,6 +56,7 @@ class InstallAccount extends Migrator
                             ['name' => '用户账号管理', 'icon' => 'layui-icon layui-icon-user', 'node' => "account/master/index"],
                             ['name' => '终端用户管理', 'icon' => 'layui-icon layui-icon-cellphone', 'node' => "account/device/index"],
                             ['name' => '用户短信管理', 'icon' => 'layui-icon layui-icon-email', 'node' => "account/message/index"],
+                            ['name' => '用户附件管理', 'icon' => 'layui-icon layui-icon-file', 'node' => "account/file/index"],
                         ],
                     ],
                     [
@@ -256,6 +258,52 @@ class InstallAccount extends Migrator
             ->addIndex('status', ['name' => 'idx_account_user_status'])
             ->addIndex('deleted', ['name' => 'idx_account_user_deleted'])
             ->addIndex('create_time', ['name' => 'idx_account_user_create_time'])
+            ->create();
+
+        // 修改主键长度
+        $this->table($table)->changeColumn('id', 'integer', ['limit' => 11, 'identity' => true]);
+    }
+
+    /**
+     * 用户附件
+     * @class AccountFile
+     * @table account_file
+     * @return void
+     */
+    private function _create_account_file()
+    {
+
+        // 当前数据表
+        $table = 'account_file';
+
+        // 存在则跳过
+        if ($this->hasTable($table)) return;
+
+        // 创建数据表
+        $this->table($table, [
+            'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => '用户-附件',
+        ])
+            ->addColumn('type', 'string', ['limit' => 20, 'default' => '', 'null' => true, 'comment' => '上传类型'])
+            ->addColumn('name', 'string', ['limit' => 180, 'default' => '', 'null' => true, 'comment' => '文件名称'])
+            ->addColumn('xext', 'string', ['limit' => 100, 'default' => '', 'null' => true, 'comment' => '文件后缀'])
+            ->addColumn('xurl', 'string', ['limit' => 500, 'default' => '', 'null' => true, 'comment' => '访问链接'])
+            ->addColumn('xkey', 'string', ['limit' => 500, 'default' => '', 'null' => true, 'comment' => '文件路径'])
+            ->addColumn('mime', 'string', ['limit' => 100, 'default' => '', 'null' => true, 'comment' => '文件类型'])
+            ->addColumn('size', 'biginteger', ['limit' => 20, 'default' => 0, 'null' => true, 'comment' => '文件大小'])
+            ->addColumn('unid', 'biginteger', ['limit' => 20, 'default' => 0, 'null' => true, 'comment' => '会员编号'])
+            ->addColumn('isfast', 'integer', ['limit' => 1, 'default' => 0, 'null' => true, 'comment' => '是否秒传'])
+            ->addColumn('issafe', 'integer', ['limit' => 1, 'default' => 0, 'null' => true, 'comment' => '安全模式'])
+            ->addColumn('create_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '创建时间'])
+            ->addColumn('update_at', 'datetime', ['default' => NULL, 'null' => true, 'comment' => '更新时间'])
+            ->addIndex('type', ['name' => 'idx_account_file_type'])
+            ->addIndex('uuid', ['name' => 'idx_account_file_uuid'])
+            ->addIndex('xext', ['name' => 'idx_account_file_xext'])
+            ->addIndex('xkey', ['name' => 'idx_account_file_xkey'])
+            ->addIndex('unid', ['name' => 'idx_account_file_unid'])
+            ->addIndex('name', ['name' => 'idx_account_file_name'])
+            ->addIndex('issafe', ['name' => 'idx_account_file_issafe'])
+            ->addIndex('isfast', ['name' => 'idx_account_file_isfast'])
+            ->addIndex('create_at', ['name' => 'idx_account_file_create_at'])
             ->create();
 
         // 修改主键长度

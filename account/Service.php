@@ -53,6 +53,7 @@ class Service extends Plugin
                             ['name' => '用户账号管理', 'icon' => 'layui-icon layui-icon-user', 'node' => "account/master/index"],
                             ['name' => '终端用户管理', 'icon' => 'layui-icon layui-icon-cellphone', 'node' => "account/device/index"],
                             ['name' => '用户短信管理', 'icon' => 'layui-icon layui-icon-email', 'node' => "account/message/index"],
+                            ['name' => '用户附件管理', 'icon' => 'layui-icon layui-icon-file', 'node' => "account/file/index"],
                         ],
                     ],
                     [
