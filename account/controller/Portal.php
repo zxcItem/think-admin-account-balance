@@ -83,14 +83,14 @@ class Portal extends Controller
 
         // 近十天的用户及交易趋势
         if (empty($this->accountAmount = $this->app->cache->get('accountAmount', []))) {
-            $field = ['count(1)' => 'count', 'left(create_time,10)' => 'mday'];
+            $field = ['count(1)' => 'count', 'substr(create_time,1,10)' => 'mday'];
 
             // 统计余额数据
-            $model = AccountBalance::mk()->field($field + ['sum(if(amount>0,amount,0))' => 'amount1', 'sum(if(amount<0,amount,0))' => 'amount2']);
+            $model = AccountBalance::mk()->field($field + ['sum(case when amount>0 then amount else 0 end)' => 'amount1', 'sum(case when amount<0 then amount else 0 end)' => 'amount2']);
             $balances = $model->whereTime('create_time', '-10 days')->where(['deleted' => 0])->group('mday')->select()->column(null, 'mday');
 
             // 统计积分数据
-            $model = AccountIntegral::mk()->field($field + ['sum(if(amount>0,amount,0))' => 'amount1', 'sum(if(amount<0,amount,0))' => 'amount2']);
+            $model = AccountIntegral::mk()->field($field + ['sum(case when amount>0 then amount else 0 end)' => 'amount1', 'sum(case when amount<0 then amount else 0 end)' => 'amount2']);
             $integrals = $model->whereTime('create_time', '-10 days')->where(['deleted' => 0])->group('mday')->select()->column(null, 'mday');
 
             // 数据格式转换
